@@ -17,14 +17,10 @@ first, tick the files or folders you want, and unpack just those.
 2. Drag **ZipPick** onto the **Applications** folder.
 3. Open ZipPick from Applications once. This also adds it to Finder's right-click menu.
 
-**The first time you open it**, macOS will say it could not verify the app, because ZipPick
-is not yet signed with a paid Apple developer certificate. To allow it:
+ZipPick is signed and notarized by Apple, so it opens like any other downloaded app: macOS asks
+once whether you want to open it, and you click **Open**.
 
-1. Click **Done** on the warning.
-2. Open **System Settings → Privacy & Security** and scroll down.
-3. Next to "ZipPick was blocked", click **Open Anyway** and confirm.
-
-You only need to do this once. Works on macOS 13 or later, on Apple Silicon and Intel Macs.
+Works on macOS 13 or later, on Apple Silicon and Intel Macs.
 
 ## How to use it
 
@@ -85,6 +81,15 @@ You need Xcode (or its command line tools) with Swift 5.9 or later.
 
 That builds `dist/ZipPick.app`, copies it to `/Applications` and registers the Finder action.
 `./build.sh dmg` packages `dist/ZipPick.dmg` for sharing.
+
+To make a DMG that other Macs open without a warning, sign it with a Developer ID certificate
+and notarize it:
+
+```bash
+SIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)" ./build.sh dmg
+xcrun notarytool submit dist/ZipPick.dmg --keychain-profile YOUR_PROFILE --wait
+xcrun stapler staple dist/ZipPick.dmg
+```
 
 Project layout:
 
